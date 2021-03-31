@@ -1,8 +1,7 @@
-type CartItem = { name: string; price: number };
-type orderStatus = 'open' | 'closed';
+import { CartItem } from './interfaces/cart-item';
+
 export class ShoppingCart {
   private readonly _items: CartItem[] = [];
-  private _orderStatus: orderStatus = 'open';
 
   addItem(item: CartItem): void {
     this._items.push(item);
@@ -15,36 +14,13 @@ export class ShoppingCart {
     return this._items;
   }
 
-  get orderStatus(): orderStatus {
-    return this._orderStatus;
-  }
   total(): number {
     return Number(
       this._items.reduce((total, next) => total + next.price, 0).toFixed(2),
     );
   }
-
-  checkout(): void {
-    if (this.isEmpaty()) {
-      console.log('Seu carrinho está vazio');
-      return;
-    }
-
-    this._orderStatus = 'closed';
-    this.sendMessage(`Seu pedido com total de ${this.total()} foi recebido.`);
-    this.saveOrder();
-    this.clear();
-  }
-
   isEmpaty(): boolean {
     return this._items.length === 0;
-  }
-  sendMessage(msg: string): void {
-    console.log('Mensagem enviada:', msg);
-  }
-
-  saveOrder(): void {
-    console.log('Pedido salvo com sucesso....');
   }
 
   clear(): void {
@@ -53,14 +29,3 @@ export class ShoppingCart {
     this._items.length = 0;
   }
 }
-
-const shoppingCart = new ShoppingCart();
-
-shoppingCart.addItem({ name: 'Camisa', price: 10.0 });
-shoppingCart.addItem({ name: 'Tenis', price: 90.0 });
-shoppingCart.addItem({ name: 'Caderno', price: 9.9 });
-shoppingCart.addItem({ name: 'Lápis', price: 1.59 });
-console.log(shoppingCart.items);
-console.log(shoppingCart.total());
-shoppingCart.checkout();
-console.log(shoppingCart.orderStatus);
